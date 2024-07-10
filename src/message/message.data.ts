@@ -87,10 +87,25 @@ export class MessageData {
     return { messages: result.map(chatMessageToObject), hasMore };
   }
 
-  async delete(messageId: ObjectID): Promise<ChatMessage> {
-    // TODO allow a message to be marked as deleted
-    return new ChatMessage() // Minimum to pass ts checks -replace this
+
+  async delete(messageId: ObjectID): Promise<ChatMessageModel> {
+        // TODO allow a message to be marked as deleted
+        // want this method to find the message by its ID and then update the deleted field to true
+    const deletedMessage = await this.chatMessageModel.findByIdAndUpdate(
+      messageId,
+      { deleted: true }, // update deleted field to true
+      { new: true, returnOriginal: false },
+    );
+
+    // error handling
+    if (!deletedMessage) {
+      throw new Error('Message not found');
+    }
+
+    //return updated message
+    return chatMessageToObject(deletedMessage);
   }
+
 
   async resolve(messageId: ObjectID): Promise<ChatMessage> {
     const filterBy = { _id: messageId };

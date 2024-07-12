@@ -161,6 +161,10 @@ export class ChatMessageModel {
   conversation: { id: string };
   likesCount: number;
   sender: { id: string };
+
+  // want to add tags as a property of the ChatMessageModel schema
+  @Prop({ type: [String], default: [] })
+  tags?: string[];
 }
 
 export type ChatMessageDocument = ChatMessageModel & Document;

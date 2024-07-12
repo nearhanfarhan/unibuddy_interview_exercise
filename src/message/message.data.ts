@@ -29,11 +29,27 @@ export class MessageData {
     chatMessage.conversationId = data.conversationId;
     chatMessage.created = new Date();
     chatMessage.deleted = false;
+    chatMessage.tags = data.tags; // add tags to the message
 
     createRichContent(data, chatMessage);
 
     const dbResult = await chatMessage.save();
     return chatMessageToObject(dbResult);
+  }
+
+  //add a method to add tags to a message
+  async addTags(messageId: ObjectID, tags: string[]): Promise<ChatMessageModel> {
+    const updatedMessage = await this.chatMessageModel.findByIdAndUpdate(
+      messageId,
+      { tags },
+      { new: true, returnOriginal: false },
+    );
+
+    if (!updatedMessage) {
+      throw new Error('Message not found');
+    }
+
+    return chatMessageToObject(updatedMessage);
   }
 
   async getMessage(messageId: string): Promise<ChatMessageModel> {

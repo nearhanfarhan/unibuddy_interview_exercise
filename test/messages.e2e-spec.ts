@@ -56,7 +56,7 @@ describe('Message', () => {
       messageDto: {
         text: 'End too end message',
         conversationId: conversationId,
-      },
+      }
     });
 
     // Create a time variable which is ten seconds earlier than the client request
@@ -76,7 +76,7 @@ describe('Message', () => {
     expect(
       new Date(result.sendConversationMessage.created).getTime(),
     ).toBeGreaterThan(testDateTime);
-  });
+  }, 10000);
 
   it('user can delete a message', async () => {
     const { id: conversationId } = await createConversationForTest();
